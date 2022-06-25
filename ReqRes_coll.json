@@ -1,0 +1,492 @@
+{
+	"info": {
+		"_postman_id": "858e3121-e8d8-4e8a-91d5-38b9b2eef68a",
+		"name": "ReqRes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21569980"
+	},
+	"item": [
+		{
+			"name": "POST",
+			"item": [
+				{
+					"name": "Register-Successful",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the status code\r",
+									"pm.test(\"status code equals to 200\",()=>{\r",
+									"    pm.response.to.have.status(200)\r",
+									"})\r",
+									"// check the string of response status\r",
+									"pm.test(\"Status code name has string OK\", ()=> {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"// Check the token/resonse body is encrypted \r",
+									"pm.test(\"Check the resonse body/token is encrypted\", ()=> {\r",
+									"    pm.response.to.be.header(\"Content-Type\",\"application/json; charset=utf-8\")\r",
+									"});\r",
+									"\r",
+									"// check the response time is below 200 ms average repsonse time \r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"// check the response body\r",
+									"pm.test(\"check the response body\", ()=> {\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\",\"token\");\r",
+									"});\r",
+									"\r",
+									"// make the api testing more dynamic \r",
+									"const response=pm.response.json();\r",
+									"pm.collectionVariables.set(\"accesstoken\", response.token);\r",
+									"console.log(pm.environment.get('accesstoken'));\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"eve.holt@reqres.in\",\r\n    \"password\": \"122256\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{RegisterURL}}",
+							"host": [
+								"{{RegisterURL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register-Successful-Check password field",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the status code\r",
+									"pm.test(\"status code equals to 200\",()=>{\r",
+									"    pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Status code name has string OK\", ()=> {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"// Check the token/resonse body is encrypted \r",
+									"pm.test(\"Check the resonse body/token is encrypted\", ()=> {\r",
+									"    pm.response.to.be.header(\"Content-Type\",\"application/json; charset=utf-8\")\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the response body\", ()=> {\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\",\"token\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"eve.holt@reqres.in\",\r\n    \"password\": \"(%#?'.)\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{RegisterURL}}",
+							"host": [
+								"{{RegisterURL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register-Unsuccessful-missing password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// do assertion \r",
+									"pm.test(\"Status code is 400 Bad request\",  ()=> {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"//\r",
+									"pm.test(\"Status code name has string\", ()=> {\r",
+									"    pm.response.to.have.status(\"Bad Request\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the response body\",()=>{\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.error).to.eql(\"Missing password\");\r",
+									"});\r",
+									"\r",
+									"//check the response time taken\r",
+									"pm.test(\"Response time is less than 200ms\", () =>{\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"eve.holt@reqres.in\"\r\n    \r\n}\r\n ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{RegisterURL}}",
+							"host": [
+								"{{RegisterURL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register-Unsuccessful-missing email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"// do assertion \r",
+									"pm.test(\"Status code is 400 Bad request\",  ()=> {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"//\r",
+									"pm.test(\"Status code name has string\", ()=> {\r",
+									"    pm.response.to.have.status(\"Bad Request\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the response body\",()=>{\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.error).to.eql(\"Missing email or username\");\r",
+									"});\r",
+									"\r",
+									"//check the response time taken\r",
+									"pm.test(\"Response time is less than 200ms\", () =>{\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"pistol\"\r\n    \r\n}\r\n ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{RegisterURL}}",
+							"host": [
+								"{{RegisterURL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register-Unsuccessful-invalid data in email field",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"// do assertion \r",
+									"pm.test(\"Status code is 400 Bad request\",  ()=> {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"//\r",
+									"pm.test(\"Status code name has string\", ()=> {\r",
+									"    pm.response.to.have.status(\"Bad Request\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the response body\",()=>{\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.error).to.eql(\"Note: Only defined users succeed registration\");\r",
+									"});\r",
+									"\r",
+									"//check the response time taken\r",
+									"pm.test(\"Response time is less than 200ms\", () =>{\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"am6031@gmail.com\",\r\n    \"password\": \"pistol\"\r\n    \r\n}\r\n ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{RegisterURL}}",
+							"host": [
+								"{{RegisterURL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register - Unsuccessful- invalid request body format",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"// do assertion \r",
+									"pm.test(\"Status code is 400 Bad request\",  ()=> {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"//\r",
+									"pm.test(\"Status code name has string\", ()=> {\r",
+									"    pm.response.to.have.status(\"Bad Request\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the response body\",()=>{\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.error).to.eql(\"Missing email or username\");\r",
+									"});\r",
+									"\r",
+									"//check the response time taken\r",
+									"pm.test(\"Response time is less than 200ms\", () =>{\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"eve.holt@reqres.in\",\r\n    \"password\": \"122256\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "html"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{RegisterURL}}",
+							"host": [
+								"{{RegisterURL}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DELETE",
+			"item": [
+				{
+					"name": "DELETE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\",  ()=> {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", () =>{\r",
+									"    pm.expect(pm.response.text()).to.include(\"\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\",  ()=> {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"No Content\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/2",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete with authorization",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\",  ()=> {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", () =>{\r",
+									"    pm.expect(pm.response.text()).to.include(\"\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\",  ()=> {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"No Content\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accesstoken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/2",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accesstoken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "accesstoken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "RegisterURL",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "BaseURL",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
